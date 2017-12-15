@@ -40,7 +40,7 @@ import java.util.List;
  * 　　　　　　　　　　┃┫┫　┃┫┫
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
  **/
-@RestController()
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -82,7 +82,7 @@ public class UserController {
         return user;
     }
 
-    @GetMapping()
+    @GetMapping
     @JsonView(User.UserSimpleView.class)
     public List<User> query(UserQueryCondition userQueryCondition, @PageableDefault(page = 1,size = 10,sort = "username,asc")Pageable pageable){
 

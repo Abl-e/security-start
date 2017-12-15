@@ -1,15 +1,12 @@
-package com.tangguoxiang.wiremock;
+package com.tangguoxiang.security.browser;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.core.io.ClassPathResource;
-
-import java.io.IOException;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
  * @author 唐国翔
- * @create 2017-12-15 16:02
+ * @create 2017-12-15 17:57
  * <p>
  * 　　　　　　　　┏┓　　　┏┓+ +
  * 　　　　　　　┏┛┻━━━┛┻┓ + +
@@ -33,18 +30,14 @@ import java.io.IOException;
  * 　　　　　　　　　　┃┫┫　┃┫┫
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
  **/
-public class MockServer {
-    public static void main(String[] args) throws IOException {
-        WireMock.configureFor(8077);
-        WireMock.removeAllMappings();
-
-        mock("/order/1","01");
-        mock("/order/2","02");
-    }
-
-    private static void mock(String url, String filename) throws IOException {
-        ClassPathResource resource = new ClassPathResource("mock/response/"+filename+".txt");
-        String content = StringUtils.join(FileUtils.readLines(resource.getFile(),"UTF-8").toArray(),"\n");
-        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo(url)).willReturn(WireMock.aResponse().withBody(content).withStatus(200)));
+@Configuration
+public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter{
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin()
+                .and()
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated();
     }
 }
